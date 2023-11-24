@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-export function Home() {
+export function Menu() {
   return (
     <div style={{ textAlign: "center", marginTop: "20px" }}>
       <img
@@ -17,8 +17,17 @@ export function Home() {
         }}
       />
       <h2>Bienvenido</h2>
-      <Link to='/menu'> Ingresar </Link>
+      <div className="mt-3">
+      <Link to='/usuarios' > Alumnos </Link></div> 
       
+      <div className="mt-3">
+      <Link> Cuotas Vencidas </Link></div> 
+      
+      <div className="mt-3">
+      <Link> Nuevo Pago</Link></div> 
+      
+      <div className="mt-3">
+      <Link to='/'> Volver</Link></div> 
     </div>
   );
 }

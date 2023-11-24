@@ -1,0 +1,3 @@
+SELECT u.nombre, p.fecha_pago, p.fecha_vencimiento
+FROM usuarios as u
+INNER JOIN pagos as p ON u.pagosid = p.pago_id;

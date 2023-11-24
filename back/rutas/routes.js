@@ -11,15 +11,21 @@ const db = require('../base de datos/bd')
 
 // Ruta para obtener todos los usuarios
 app.get('/usuarios', (req, res) => {
-  db.query(`
-    SELECT 
-      U.usuario_id,
-      U.nombre AS nombre_usuario,
-      M.nombre AS Membresia,
-      E.estadousuario AS Estado_usuario
-    FROM Usuarios AS U
-    INNER JOIN Membresias AS M ON U.membresia_id = M.membresia_id
-    INNER JOIN Estado AS E ON U.id_estado = E.idestado
+  db.query(`SELECT 
+  U.usuario_id,
+  U.nombre AS nombre_usuario,
+  U.apellido AS apellido,
+  U.email AS email,
+  U.direccion AS direccion,
+  U.telefono AS telefono,
+  M.nombre AS Membresia,
+  p.fecha_vencimiento,
+  E.estadousuario AS Estado_usuario
+FROM Usuarios AS U
+INNER JOIN Membresias AS M ON U.membresia_id = M.membresia_id
+INNER JOIN Estado AS E ON U.id_estado = E.idestado
+INNER JOIN pagos AS p ON U.pagosid = p.pago_id;
+
   `, (err, resultados) => {
     if (err) {
       console.log(err);
@@ -29,6 +35,7 @@ app.get('/usuarios', (req, res) => {
     }
   });
 });
+
 
 
 // Ruta para obtener un usuario por ID
@@ -46,6 +53,27 @@ app.get('/usuarios/:id', (req, res) => {
   });
 });
 
+app.get('/usuarios/nombre/:inicialesNombre', (req, res) => {
+  const inicialesNombre = req.params.inicialesNombre + '%'; // Agregamos '%' para buscar iniciales coincidentes al inicio
+  db.query('SELECT * FROM Usuarios WHERE nombre LIKE ?', [inicialesNombre], (err, resultados) => {
+    if (err) {
+      throw err;
+    }
+    if (resultados.length > 0) {
+      res.json(resultados);
+    } else {
+      res.status(404).json({ mensaje: 'Usuarios no encontrados' });
+    }
+  });
+});
+
+
+
+
+
+
+
+
 // Ruta para crear un nuevo usuario
 app.post('/usuarios', (req, res) => {
   const nuevoUsuario = req.body;
@@ -56,6 +84,7 @@ app.post('/usuarios', (req, res) => {
     res.json({ mensaje: 'Usuario creado con éxito', usuario_id: resultado.insertId });
   });
 });
+
 
 // Ruta para actualizar un usuario por ID
 app.put('/usuarios/:id', (req, res) => {
