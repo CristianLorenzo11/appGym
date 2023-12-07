@@ -24,7 +24,7 @@ export function Menu() {
       <Link> Cuotas Vencidas </Link></div> 
       
       <div className="mt-3">
-      <Link> Nuevo Pago</Link></div> 
+      <Link> Cuotas</Link></div> 
       
       <div className="mt-3">
       <Link to='/'> Volver</Link></div> 
