@@ -39,19 +39,19 @@ INNER JOIN pagos AS p ON U.pagosid = p.pago_id;
 
 
 // Ruta para obtener un usuario por ID
-app.get('/usuarios/:id', (req, res) => {
-  const usuarioId = req.params.id;
-  db.query('SELECT * FROM Usuarios WHERE usuario_id = ?', [usuarioId], (err, resultados) => {
-    if (err) {
-      throw err;
-    }
-    if (resultados.length > 0) {
-      res.json(resultados[0]);
-    } else {
-      res.status(404).json({ mensaje: 'Usuario no encontrado' });
-    }
-  });
-});
+app.get("/usuarios/:usuario_id", (req , res)=> {
+
+          const {usuario_id} = req.params
+          db.query( "select* from usuarios WHERE usuario_id = ? ",[usuario_id],(error,registro)=>{
+      if(error){
+          console.log("el error es",error)
+      }
+      else{
+          res.json(registro)
+      } })
+      })
+;
+
 
 app.get('/usuarios/nombre/:inicialesNombre', (req, res) => {
   const inicialesNombre = req.params.inicialesNombre + '%'; // Agregamos '%' para buscar iniciales coincidentes al inicio

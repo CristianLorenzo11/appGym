@@ -1,0 +1,25 @@
+/* Info.css */
+
+.detalles-usuario {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: left;  /* Alinea el texto a la izquierda */
+  }
+  
+  .detalles-usuario h2 {
+    color: #333;
+  }
+  
+  .detalles-usuario p {
+    margin: 8px 0;
+    color: #555;
+  }
+  .detalles-usuario strong {
+    font-weight: bold; /* Esto hace que el texto dentro de <strong> sea negrita */
+  }
+  /* Puedes agregar más estilos según tus preferencias */
+  

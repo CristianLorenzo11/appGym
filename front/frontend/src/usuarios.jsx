@@ -22,6 +22,11 @@ export function Usuario() {
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     return new Date(fecha).toLocaleDateString(undefined, options);
   };
+  const handleVerInfoClick = (usuarioId) => {
+    // Aquí puedes realizar acciones relacionadas con el clic, como navegar a la página de detalles o mostrar un modal.
+    console.log(`Clic en "Ver info" para el usuario con ID ${usuarioId}`);
+  };
+  
 
   return (
     <>
@@ -77,6 +82,9 @@ export function Usuario() {
                 <td>{u.Estado_usuario}</td>
                 <td>{u.Membresia}</td>
                 <td>{formatearFecha(u.fecha_vencimiento)}</td>
+                <td><button>Pagar</button></td>          
+                <td><Link to={`/usuarios/${u.usuario_id}`} onClick={() => handleVerInfoClick(u.usuario_id)}>Ver info</Link></td>
+        
               </tr>
             ))}
           </tbody>
