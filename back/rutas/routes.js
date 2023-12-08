@@ -18,13 +18,12 @@ app.get('/usuarios', (req, res) => {
   U.email AS email,
   U.direccion AS direccion,
   U.telefono AS telefono,
-  M.nombre AS Membresia,
-  p.fecha_vencimiento,
+  
   E.estadousuario AS Estado_usuario
 FROM Usuarios AS U
-INNER JOIN Membresias AS M ON U.membresia_id = M.membresia_id
+
 INNER JOIN Estado AS E ON U.id_estado = E.idestado
-INNER JOIN pagos AS p ON U.pagosid = p.pago_id;
+
 
   `, (err, resultados) => {
     if (err) {
@@ -172,6 +171,7 @@ app.delete('/membresias/:id', (req, res) => {
 app.get('/pagos', (req, res) => {
   db.query(`
     SELECT 
+    P.usuario_id,
       P.pago_id,
       U.nombre AS nombre_usuario,
       M.nombre AS nombre_membresia,

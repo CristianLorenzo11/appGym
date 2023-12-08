@@ -31,7 +31,7 @@ export function Info() {
       <p><strong>Dirección:</strong> {nombre.direccion}</p>
       <p><strong>Teléfono:</strong> {nombre.telefono}</p>
       <p><strong>Estado:</strong> {nombre.Estado_usuario}</p>
-      <p><strong>Membresía:</strong> {nombre.membresia_id}</p>
+      
     </div>
     <div>
         <Link to="/usuarios">Volver</Link>

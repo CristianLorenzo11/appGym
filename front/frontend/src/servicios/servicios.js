@@ -12,6 +12,18 @@ export async function getUsuarios(){
     const data= await respuesta.json()
     return data
 }
+export async function getPagos(){
+    const Options={
+        method:'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    }
+    const respuesta = await fetch(`${URL}/pagos`, Options)
+    const data= await respuesta.json()
+    return data
+}
+
 
 export async function getUsuariosNombres(nombre){
 

@@ -5,10 +5,13 @@ import { Link } from "react-router-dom";
 export function Usuario() {
   const [usuarios, setUsuarios] = useState([]);
   const [busqueda, setBusqueda] = useState('');
-
+  const [pagos, setPagos] = useState([]);
   useEffect(() => {
     API.getUsuarios().then(setUsuarios);
+    API.getPagos().then(setPagos);
   }, []);
+
+  console.log(pagos)
 
   const buscador = (e) => {
     setBusqueda(e.target.value);
@@ -68,7 +71,6 @@ export function Usuario() {
               <td>Apellido </td>
               <td>Telefono</td>
               <td>Estado </td>
-              <td>Membresia</td>
               <td>Vencimiento</td>
             </tr>
           </thead>
@@ -80,8 +82,28 @@ export function Usuario() {
                 <td>{u.apellido}</td>
                 <td>{u.telefono}</td>
                 <td>{u.Estado_usuario}</td>
-                <td>{u.Membresia}</td>
-                <td>{formatearFecha(u.fecha_vencimiento)}</td>
+                
+                <td>
+  {(pagos
+    .filter((p) => p.usuario_id === u.usuario_id)
+    .reduce((fechaMasLejana, pago) => {
+      const fechaVencimiento = new Date(pago.fecha_vencimiento);
+      return fechaVencimiento > fechaMasLejana ? fechaVencimiento : fechaMasLejana;
+    }, new Date(0))
+    .getTime() !== new Date(0).getTime()) // Verificar si hay fechas asociadas
+    ? pagos
+        .filter((p) => p.usuario_id === u.usuario_id)
+        .reduce((fechaMasLejana, pago) => {
+          const fechaVencimiento = new Date(pago.fecha_vencimiento);
+          return fechaVencimiento > fechaMasLejana ? fechaVencimiento : fechaMasLejana;
+        }, new Date(0))
+        .toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })
+    : null
+  }
+</td>
+
+
+
                 <td><button>Pagar</button></td>          
                 <td><Link to={`/usuarios/${u.usuario_id}`} onClick={() => handleVerInfoClick(u.usuario_id)}>Ver info</Link></td>
         
