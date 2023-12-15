@@ -1,0 +1,142 @@
+/* Estilos generales */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  /* Estilos del formulario */
+  form {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(126, 227, 245, 0.1);
+  }
+  
+  h2 {
+    color: #f7f4f4;
+    text-align: center;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 8px;
+    color: #333333;
+  }
+  
+  input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  input[type="submit"] {
+    background-color: #4caf50;
+    color: #fff;
+    cursor: pointer;
+  }
+  
+  input[type="submit"]:hover {
+    background-color: #45a049;
+  }
+  
+  input:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  /* Estilos para los campos deshabilitados */
+  input:disabled,
+  input[disabled] {
+    background-color: #eee;
+    color: #777;
+  }
+  
+  /* Estilos para los mensajes de alerta */
+  .alert {
+    color: #d9534f;
+    background-color: #f2dede;
+    border: 1px solid #ebccd1;
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 16px;
+  }
+  
+  /* Estilos para campos de fecha */
+  input[type="date"] {
+    width: calc(100% - 18px);
+    padding: 8px;
+  }
+  
+  /* Alineación de etiquetas en los campos de fecha */
+  form > div > label,
+  form > div > input[type="date"] {
+    display: inline-block;
+    margin-bottom: 8px;
+  }
+  
+  /* Alineación de etiquetas en los campos Precio, Monto y Deuda */
+  form > label,
+  form > input[type="text"] {
+    display: inline-block;
+    width: calc(50% - 4px);
+    margin-bottom: 16px;
+  }
+  
+  /* Alineación del botón de envío */
+  form > input[type="submit"] {
+    width: 100%;
+  }
+  
+
+  /* Estilos para campos de fecha */
+input[type="date"] {
+    width: calc(100% - 18px);
+    padding: 8px;
+  }
+  
+  /* Alineación de etiquetas en los campos de fecha */
+  form > div > label,
+  form > div > input[type="date"] {
+    display: inline-block;
+    margin-bottom: 8px;
+  }
+  
+  /* Alineación de etiquetas en los campos Precio, Monto y Deuda */
+  form > label,
+  form > input[type="text"] {
+    display: inline-block;
+    width: calc(50% - 4px);
+    margin-bottom: 16px;
+  }
+  
+  /* Alineación del botón de envío */
+  form > input[type="submit"] {
+    width: 100%;
+  }
+  
+  /* Estilo específico para campos de fecha con fondo blanco y texto negro */
+  input[type="date"] {
+    background-color: #fff;
+    color: #000;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  /* Ajustes adicionales para mejorar la apariencia de los campos de fecha */
+  input[type="date"]:hover,
+  input[type="date"]:focus {
+    border-color: #4caf50; /* Cambia el color del borde al pasar el ratón o enfocar el campo */
+  }
+/* Estilo para el selector de fecha en navegadores modernos (Chrome, Firefox, Safari) */
+input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+  }
+    

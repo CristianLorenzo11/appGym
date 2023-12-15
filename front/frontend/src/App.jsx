@@ -5,6 +5,7 @@ import { Home } from "./Home";
 import { Menu } from "./menu";
 import { Usuario } from "./usuarios";
 import { Info } from "./info";
+import { Pago } from "./generarPago";
 
 function App() {
 
@@ -15,7 +16,7 @@ function App() {
           <Route path="/menu" element={<Menu/>} />
           <Route path="/usuarios" element={<Usuario/>} />
           <Route path="/usuarios/:usuario_id" element={<Info/>} />
-          
+          <Route path="/pagos" element={<Pago/>} />
 
     </Routes>
     </>
