@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./pago.css"
+import { useParams } from "react-router-dom";
 
 export function Pago() {
   const [monto, setMonto] = useState("");
@@ -7,8 +8,10 @@ export function Pago() {
   const [deuda, setDeuda] = useState("");
   const [fechaPago, setFechaPago] = useState("");
   const [fechaVencimiento, setFechaVencimiento] = useState("");
+  const { usuario_id } = useParams();
 
   useEffect(() => {
+    
     // Verificar si monto y precio son números válidos
     const montoNumero = parseFloat(monto);
     const precioNumero = parseFloat(precio);
@@ -41,7 +44,13 @@ export function Pago() {
       <div>
         <h2>Formulario de Pagos</h2>
         <form onSubmit={guardarmonto}>
-          
+          <label> ID Usuario</label>
+          <input
+          type="text"
+          id="id usuario"
+          name="monto"
+          value={usuario_id}>
+          </input>
 
           <label htmlFor="fecha_pago">Fecha de Pago:</label>
           <input

@@ -104,7 +104,7 @@ export function Usuario() {
 
 
 
-                <td><Link to="/pagos"><button>Pagar </button> </Link></td>          
+                <td><Link to={`/pagos/${u.usuario_id}`}><button>Pagar </button> </Link></td>          
                 <td><Link to={`/usuarios/${u.usuario_id}`} onClick={() => handleVerInfoClick(u.usuario_id)}>Ver info</Link></td>
         
               </tr>
