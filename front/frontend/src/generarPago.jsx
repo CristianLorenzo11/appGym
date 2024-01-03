@@ -39,7 +39,7 @@ export function Pago() {
 
     try {
       // Aquí asumo que tienes una función insertarPago en tu archivo servicios/servicios.js
-      await API.AadPago({
+     await API.AadPago({
         usuario_id,
         membresia_id,
         monto: parseFloat(monto),
@@ -50,11 +50,16 @@ export function Pago() {
 
       // Puedes realizar alguna acción adicional después de insertar el pago, si es necesario
       alert("Pago insertado con éxito");
+      setTimeout(() => {
+                window.location.href = '/usuarios'
+    }, 3000)
     } catch (error) {
       console.error("Error al insertar el pago:", error);
       // Puedes manejar el error de alguna manera, mostrar un mensaje, etc.
       alert("Error al insertar el pago. Por favor, intenta nuevamente.");
     }
+
+    
   };
 
   const traerDatos = async () => {
