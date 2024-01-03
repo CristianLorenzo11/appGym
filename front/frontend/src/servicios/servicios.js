@@ -62,3 +62,15 @@ export async function getusuarioID(usuario_id) {
         throw error;
     }
 }
+
+export async function getCosto(id){
+    const Options={
+        method:'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    }
+    const respuesta = await fetch(`${URL}/membresias/${id}`, Options);
+    const data= await respuesta.json();
+    return data.costo;
+}

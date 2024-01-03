@@ -109,14 +109,15 @@ app.delete('/usuarios/:id', (req, res) => {
 });
 /////////////////////////////////////////////////////////////////////////////////////////////////
 // Obtener todas las membresías
-app.get('/membresias', (req, res) => {
-  db.query('SELECT * FROM Membresias', (err, resultados) => {
+app.get('/costo', (req, res) => {
+  db.query('SELECT costo FROM Membresias WHERE id = ?', [req.params.id], (err, resultado) => {
     if (err) {
       throw err;
     }
-    res.json(resultados);
+    res.json({ costo: resultado[0].costo });
   });
 });
+
 
 // Obtener una membresía por ID
 app.get('/membresias/:id', (req, res) => {
