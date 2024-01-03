@@ -11,6 +11,7 @@ export function Pago() {
   const [fechaVencimiento, setFechaVencimiento] = useState("");
   const [loading, setLoading] = useState(true);
   const { usuario_id } = useParams();
+  const membresia_id = 1; // Este valor podría ser dinámico dependiendo de tu lógica
 
   useEffect(() => {
     traerDatos();
@@ -35,11 +36,30 @@ export function Pago() {
       );
       return;
     }
+
+    try {
+      // Aquí asumo que tienes una función insertarPago en tu archivo servicios/servicios.js
+      await API.AadPago({
+        usuario_id,
+        membresia_id,
+        monto: parseFloat(monto),
+        fecha_pago: fechaPago,
+        fecha_vencimiento: fechaVencimiento,
+        deuda: parseFloat(deuda), // Incluye el valor calculado directamente
+      });
+
+      // Puedes realizar alguna acción adicional después de insertar el pago, si es necesario
+      alert("Pago insertado con éxito");
+    } catch (error) {
+      console.error("Error al insertar el pago:", error);
+      // Puedes manejar el error de alguna manera, mostrar un mensaje, etc.
+      alert("Error al insertar el pago. Por favor, intenta nuevamente.");
+    }
   };
 
   const traerDatos = async () => {
     try {
-      const costo = await API.getCosto(usuario_id);
+      const costo = await API.getCosto(1);
 
       // Asegúrate de que estás accediendo correctamente a la propiedad 'costo' del objeto devuelto
       setPrecio(costo);
@@ -67,7 +87,15 @@ export function Pago() {
               disabled
             />
             <br />
-
+            <label>Membresia </label>
+            <input
+              type="text"
+              id="id_membresia"
+              name="monto"
+              value={membresia_id}
+              disabled
+            />
+            <br />
             <label htmlFor="fecha_pago">Fecha de Pago:</label>
             <input
               type="date"
@@ -118,13 +146,16 @@ export function Pago() {
               id="deuda"
               name="deuda"
               value={deuda}
-              onChange={() => {}}
               required
               disabled
             />
             <br />
 
-            <input type="submit" value="Insertar Pago" />
+            <input
+              type="submit"
+              value="Insertar Pago"
+              onClick={guardarmonto} // Asigna la función al evento onClick
+            />
           </form>
         </div>
       )}

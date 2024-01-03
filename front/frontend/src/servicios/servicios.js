@@ -74,3 +74,18 @@ export async function getCosto(id){
     const data= await respuesta.json();
     return data.costo;
 }
+
+
+export async function AadPago(datos){
+    const Options={
+        method:'POST',
+        body: JSON.stringify(datos),
+        headers: {
+            'Content-Type': 'application/json',
+
+        }
+    }
+    const respuesta = await fetch(`${URL}/pagos`, Options)
+    const data= await respuesta.json()
+    return data
+}
