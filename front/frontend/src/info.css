@@ -11,12 +11,12 @@
   }
   
   .detalles-usuario h2 {
-    color: #333;
+    color: white;
   }
   
   .detalles-usuario p {
     margin: 8px 0;
-    color: #555;
+    color: white;
   }
   .detalles-usuario strong {
     font-weight: bold; /* Esto hace que el texto dentro de <strong> sea negrita */

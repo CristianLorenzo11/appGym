@@ -69,18 +69,46 @@ app.get('/usuarios/nombre/:inicialesNombre', (req, res) => {
 
 
 
-
-
-
-
-// Ruta para crear un nuevo usuario
 app.post('/usuarios', (req, res) => {
-  const nuevoUsuario = req.body;
-  db.query('INSERT INTO Usuarios SET ?', nuevoUsuario, (err, resultado) => {
+  const { nombre, apellido, email, direccion, telefono, id_estado } = req.body;
+
+  if (!nombre || !apellido || !email) {
+    return res.status(400).json({ mensaje: 'Faltan datos obligatorios: nombre, apellido o email.' });
+  }
+
+  // Buscar si ya existe un usuario con el mismo nombre y apellido
+  const queryCheck = 'SELECT COUNT(*) AS count FROM Usuarios WHERE nombre = ? AND apellido = ?';
+
+  db.query(queryCheck, [nombre, apellido], (err, results) => {
     if (err) {
-      throw err;
+      console.error('Error al verificar nombre y apellido:', err);
+      return res.status(500).json({ mensaje: 'Error interno al verificar nombre y apellido.' });
     }
-    res.json({ mensaje: 'Usuario creado con éxito', usuario_id: resultado.insertId });
+
+    if (results[0].count > 0) {
+      return res.status(409).json({ mensaje: 'El usuario con ese nombre y apellido ya existe.' });
+    }
+
+    // Insertar nuevo usuario si no existe
+    const nuevoUsuario = {
+      nombre,
+      apellido,
+      email,
+      direccion: direccion || null,
+      telefono: telefono || null,
+      id_estado: id_estado || 1,
+    };
+
+    const queryInsert = 'INSERT INTO Usuarios SET ?';
+
+    db.query(queryInsert, nuevoUsuario, (err, resultado) => {
+      if (err) {
+        console.error('Error al insertar usuario:', err);
+        return res.status(500).json({ mensaje: 'Error interno al crear usuario.' });
+      }
+
+      res.status(201).json({ mensaje: 'Usuario creado con éxito', usuario_id: resultado.insertId });
+    });
   });
 });
 
@@ -208,6 +236,7 @@ app.get('/pagos/:id', (req, res) => {
     }
   });
 });
+
 
 app.post('/pagos', (req, res) => {
   const nuevoPago = req.body;

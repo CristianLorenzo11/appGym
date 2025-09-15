@@ -89,3 +89,25 @@ export async function AadPago(datos){
     const data= await respuesta.json()
     return data
 }
+export async function AadUsuario(datos){
+    const Options={
+        method:'POST',
+        body: JSON.stringify(datos),
+        headers: {
+            'Content-Type': 'application/json',
+
+        }
+    }
+    const respuesta = await fetch(`${URL}/usuarios`, Options)
+    const data= await respuesta.json()
+    return data
+}
+export async function deleteUsuario(id) {
+    const Options = {
+        method: 'DELETE'
+    }
+
+    const respuesta = await fetch(`${URL}/usuarios/${id}`, Options)
+    const data = await respuesta.json()
+    return data
+}

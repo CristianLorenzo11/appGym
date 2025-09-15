@@ -6,6 +6,7 @@ import { Menu } from "./menu";
 import { Usuario } from "./usuarios";
 import { Info } from "./info";
 import { Pago } from "./generarPago";
+import { Addusuarios } from "./Addusuario";
 
 function App() {
 
@@ -17,7 +18,7 @@ function App() {
           <Route path="/usuarios" element={<Usuario/>} />
           <Route path="/usuarios/:usuario_id" element={<Info/>} />
           <Route path="/pagos/:usuario_id" element={<Pago/>} />
-
+          <Route path="/addusuarios" element={<Addusuarios/>} />
     </Routes>
     </>
   )

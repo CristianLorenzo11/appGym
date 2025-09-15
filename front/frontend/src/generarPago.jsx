@@ -1,169 +1,217 @@
 import React, { useState, useEffect } from "react";
 import "./pago.css";
 import * as API from './servicios/servicios';
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 export function Pago() {
+  const { usuario_id } = useParams();
+  const navigate = useNavigate();
+
+  const [usuario, setUsuario] = useState(null);
   const [monto, setMonto] = useState("");
   const [precio, setPrecio] = useState("");
   const [deuda, setDeuda] = useState("");
   const [fechaPago, setFechaPago] = useState("");
   const [fechaVencimiento, setFechaVencimiento] = useState("");
   const [loading, setLoading] = useState(true);
-  const { usuario_id } = useParams();
-  const membresia_id = 1; // Este valor podría ser dinámico dependiendo de tu lógica
+  const [pagoGuardado, setPagoGuardado] = useState(false);
+  const [numeroWhatsAppManual, setNumeroWhatsAppManual] = useState("");
+  const [mostrarInputManual, setMostrarInputManual] = useState(false);
+
+  const membresia_id = 1;
 
   useEffect(() => {
-    traerDatos();
-  }, []); // Ejecutará solo una vez al montar el componente
+    async function cargarDatos() {
+      try {
+        const usuarios = await API.getUsuarios();
+        const usuarioEncontrado = usuarios.find(u => u.usuario_id.toString() === usuario_id);
+        setUsuario(usuarioEncontrado || null);
+
+        const costo = await API.getCosto(membresia_id);
+        setPrecio(costo);
+
+        setLoading(false);
+      } catch (error) {
+        console.error("Error al cargar datos:", error);
+        setLoading(false);
+      }
+    }
+    if (usuario_id) cargarDatos();
+  }, [usuario_id]);
 
   useEffect(() => {
-    const montoNumero = parseFloat(monto);
-    const precioNumero = parseFloat(precio);
-
-    if (!isNaN(montoNumero) && !isNaN(precioNumero)) {
-      const nuevaDeuda = precioNumero - montoNumero;
+    const montoNum = parseFloat(monto);
+    const precioNum = parseFloat(precio);
+    if (!isNaN(montoNum) && !isNaN(precioNum)) {
+      const nuevaDeuda = precioNum - montoNum;
       setDeuda(nuevaDeuda.toFixed(2));
+    } else {
+      setDeuda("");
     }
   }, [monto, precio]);
+
+  useEffect(() => {
+    if (fechaPago) {
+      const fecha = new Date(fechaPago);
+      fecha.setDate(fecha.getDate() + 30);
+      setFechaVencimiento(fecha.toISOString().split("T")[0]);
+    }
+  }, [fechaPago]);
 
   const guardarmonto = async (event) => {
     event.preventDefault();
 
     if (!monto || !precio || !usuario_id || !fechaPago || !fechaVencimiento) {
-      alert(
-        "Todos los campos son obligatorios. Por favor, complete todos los campos."
-      );
+      alert("Todos los campos son obligatorios.");
+      return;
+    }
+    if (isNaN(monto) || parseFloat(monto) < 0) {
+      alert("El monto debe ser un número válido mayor o igual a 0.");
+      return;
+    }
+    if (isNaN(precio) || parseFloat(precio) <= 0) {
+      alert("El precio debe ser un número válido mayor a 0.");
       return;
     }
 
     try {
-      // Aquí asumo que tienes una función insertarPago en tu archivo servicios/servicios.js
-     await API.AadPago({
+      await API.AadPago({
         usuario_id,
         membresia_id,
         monto: parseFloat(monto),
         fecha_pago: fechaPago,
         fecha_vencimiento: fechaVencimiento,
-        deuda: parseFloat(deuda), // Incluye el valor calculado directamente
+        deuda: parseFloat(deuda),
       });
 
-      // Puedes realizar alguna acción adicional después de insertar el pago, si es necesario
       alert("Pago insertado con éxito");
-      setTimeout(() => {
-                window.location.href = '/usuarios'
-    }, 3000)
+      setPagoGuardado(true);
     } catch (error) {
       console.error("Error al insertar el pago:", error);
-      // Puedes manejar el error de alguna manera, mostrar un mensaje, etc.
-      alert("Error al insertar el pago. Por favor, intenta nuevamente.");
+      alert("Error al insertar el pago.");
     }
+  }; 
 
-    
-  };
-
-  const traerDatos = async () => {
-    try {
-      const costo = await API.getCosto(1);
-
-      // Asegúrate de que estás accediendo correctamente a la propiedad 'costo' del objeto devuelto
-      setPrecio(costo);
-      setLoading(false);
-    } catch (error) {
-      console.error("Error al obtener los datos:", error);
-      setLoading(false); // Asegurémonos de marcar que la carga ha terminado incluso en caso de error
-    }
-  };
+  const mensajeResumen = `Resumen de pago:\nCliente: ${usuario ? usuario.nombre_usuario + " " + usuario.apellido : ""}\nUsuario ID: ${usuario_id}\nMonto: $${monto}\nFecha de Pago: ${fechaPago}\nVencimiento: ${fechaVencimiento}\nDeuda: $${deuda}`;
+ 
+  if (loading) return <p>Cargando...</p>;
+  if (!usuario) return <p>Usuario no encontrado</p>;
 
   return (
-    <>
-      {loading ? (
-        <p>Cargando...</p>
-      ) : (
+    <div>
+      <h2>Formulario de Pagos</h2>
+      <form onSubmit={guardarmonto}>
+        <div className="full-width">
+          <label>Nombre del Cliente:</label>
+          <input type="text" value={`${usuario.nombre_usuario} ${usuario.apellido}`} disabled className="full-width" />
+        </div>
+
         <div>
-          <h2>Formulario de Pagos</h2>
-          <form onSubmit={guardarmonto}>
-            <label>ID Usuario</label>
-            <input
-              type="text"
-              id="id_usuario"
-              name="monto"
-              value={usuario_id}
-              disabled
-            />
-            <br />
-            <label>Membresia </label>
-            <input
-              type="text"
-              id="id_membresia"
-              name="monto"
-              value={membresia_id}
-              disabled
-            />
-            <br />
-            <label htmlFor="fecha_pago">Fecha de Pago:</label>
-            <input
-              type="date"
-              id="fecha_pago"
-              name="fecha_pago"
-              value={fechaPago}
-              onChange={(event) => setFechaPago(event.target.value)}
-              required
-            />
-            <br />
+          <label>ID Usuario:</label>
+          <input type="text" value={usuario_id} disabled />
+        </div>
 
-            <label htmlFor="fecha_vencimiento">Vencimiento:</label>
-            <input
-              type="date"
-              id="fecha_vencimiento"
-              name="fecha_vencimiento"
-              value={fechaVencimiento}
-              onChange={(event) => setFechaVencimiento(event.target.value)}
-              required
-            />
-            <br />
+        <div>
+          <label>Membresía:</label>
+          <input type="text" value={membresia_id} disabled />
+        </div>
 
-            <label htmlFor="precio">Precio:</label>
-            <input
-              type="text"
-              id="precio"
-              name="precio"
-              value={precio}
-              onChange={(event) => setPrecio(event.target.value)}
-              required
-            />
-            <br />
+        <div>
+          <label>Fecha de Pago:</label>
+          <input
+            type="date"
+            value={fechaPago}
+            onChange={(e) => setFechaPago(e.target.value)}
+            required
+            disabled={pagoGuardado}
+          />
+        </div>
 
-            <label htmlFor="monto">Monto:</label>
-            <input
-              type="text"
-              id="monto"
-              name="monto"
-              value={monto}
-              onChange={(event) => setMonto(event.target.value)}
-              required
-            />
-            <br />
+        <div>
+          <label>Vencimiento:</label>
+          <input type="date" value={fechaVencimiento} disabled />
+        </div>
 
-            <label htmlFor="deuda">Deuda:</label>
-            <input
-              type="text"
-              id="deuda"
-              name="deuda"
-              value={deuda}
-              required
-              disabled
-            />
-            <br />
+        <div>
+          <label>Precio:</label>
+          <input
+            type="number"
+            value={precio}
+            onChange={(e) => setPrecio(e.target.value)}
+            required
+            disabled={pagoGuardado}
+          />
+        </div>
 
-            <input
-              type="submit"
-              value="Insertar Pago"
-              onClick={guardarmonto} // Asigna la función al evento onClick
-            />
-          </form>
+        <div>
+          <label>Monto:</label>
+          <input
+            type="number"
+            value={monto}
+            onChange={(e) => setMonto(e.target.value)}
+            required
+            disabled={pagoGuardado}
+          />
+        </div>
+
+        <div>
+          <label>Deuda:</label>
+          <input type="text" value={deuda} disabled />
+        </div>
+
+        <div className="full-width">
+          <input type="submit" value="Insertar Pago" disabled={pagoGuardado} />
+        </div>
+      </form>
+
+      {pagoGuardado && (
+        <div className="resumen-pago">
+          <h3>Resumen del Pago</h3>
+          <p>Cliente: <b>{usuario.nombre_usuario} {usuario.apellido}</b></p>
+          <p>Vas a registrar un pago de <b>${monto}</b> el día <b>{fechaPago}</b></p>
+          <p>Vencimiento: <b>{fechaVencimiento}</b></p>
+          <p>Deuda: <b>${deuda}</b></p>
+
+          {usuario.telefono ? (
+            <button
+              onClick={() => {
+                const telefono = usuario.telefono.replace(/\D/g, "");
+                const url = `https://api.whatsapp.com/send?phone=${telefono}&text=${encodeURIComponent(mensajeResumen)}`;
+                window.open(url, "_blank");
+                setTimeout(() => navigate("/usuarios"), 1500);
+              }}
+            >
+              Enviar por WhatsApp
+            </button>
+          ) : (
+            !mostrarInputManual ? (
+              <button onClick={() => setMostrarInputManual(true)}>
+                Ingresar número para enviar por WhatsApp
+              </button>
+            ) : (
+              <div style={{ marginTop: "10px" }}>
+                <input
+                  type="text"
+                  placeholder="Ingresá el número sin + ni espacios"
+                  value={numeroWhatsAppManual}
+                  onChange={(e) => setNumeroWhatsAppManual(e.target.value)}
+                />
+                <button
+                  onClick={() => {
+                    const telefono = numeroWhatsAppManual.replace(/\D/g, "");
+                    const url = `https://api.whatsapp.com/send?phone=${telefono}&text=${encodeURIComponent(mensajeResumen)}`;
+                    window.open(url, "_blank");
+                    setTimeout(() => navigate("/usuarios"), 1500);
+                  }}
+                  style={{ marginLeft: "5px" }}
+                >
+                  Enviar mensaje
+                </button>
+              </div>
+            )
+          )}
         </div>
       )}
-    </>
+    </div>
   );
 }

@@ -11,7 +11,7 @@ export function Menu() {
         style={{
           width: "200px", // Ajusta el tamaño de acuerdo a tus necesidades
           height: "auto",
-          border: "2px solid #333", // Puedes cambiar el color y el grosor del borde 
+          // Puedes cambiar el color y el grosor del borde 
          borderRadius: "50%", // Esto hará que la imagen sea circular, ajusta según desees
          boxShadow: "0 0 10px rgba(0, 0, 0, 0.3)", // Agrega un sombreado para el efecto 3D
         }}

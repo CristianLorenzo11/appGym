@@ -30,7 +30,7 @@ export function Info() {
       <p><strong>Email:</strong> {nombre.email}</p>
       <p><strong>Dirección:</strong> {nombre.direccion}</p>
       <p><strong>Teléfono:</strong> {nombre.telefono}</p>
-      <p><strong>Estado:</strong> {nombre.Estado_usuario}</p>
+      
       
     </div>
     <div>
